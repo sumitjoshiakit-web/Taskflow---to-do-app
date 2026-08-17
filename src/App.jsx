@@ -13,69 +13,50 @@ function App() {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const addTask = useCallback((title, priority) => {
-    const newTask = {
-      id: crypto.randomUUID(),
-      title: title.trim(),
-      priority,
-      status: 'todo'
-    };
+    const normalizedTitle = title.trim().toLowerCase();
+    if (tasks.some(task => task.title.trim().toLowerCase() === normalizedTitle)) return false;
+
+    const newTask = { id: crypto.randomUUID(), title: title.trim(), priority, status: 'todo' };
     setTasks(prev => [...prev, newTask]);
     setIsFormOpen(false);
-  }, [setTasks]);
+    return true;
+  }, [tasks, setTasks]);
 
   const deleteTask = useCallback((taskId) => {
     setTasks(prev => prev.filter(task => task.id !== taskId));
   }, [setTasks]);
 
   const editTask = useCallback((taskId, newTitle) => {
-    setTasks(prev =>
-      prev.map(task =>
-        task.id === taskId
-          ? { ...task, title: newTitle.trim() }
-          : task
-      )
-    );
-  }, [setTasks]);
+    const normalizedTitle = newTitle.trim().toLowerCase();
+    if (tasks.some(task => task.id !== taskId && task.title.trim().toLowerCase() === normalizedTitle)) return false;
 
-  const moveTask = useCallback((taskId, newStatus) => {
-    setTasks(prev =>
-      prev.map(task =>
-        task.id === taskId
-          ? { ...task, status: newStatus }
-          : task
-      )
-    );
-  }, [setTasks]);
+    setTasks(prev => prev.map(task => task.id === taskId ? { ...task, title: newTitle.trim() } : task));
+    return true;
+  }, [tasks, setTasks]);
 
   const filteredTasks = tasks.filter(task =>
     task.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const getTasksByStatus = (status) => {
-    return filteredTasks.filter(task => task.status === status);
-  };
-
+  const getTasksByStatus = (status) => filteredTasks.filter(task => task.status === status);
   const todoTasks = getTasksByStatus('todo');
   const inProgressTasks = getTasksByStatus('in-progress');
   const doneTasks = getTasksByStatus('done');
 
   const handleDragEnd = useCallback((event) => {
     const { active, over } = event;
-
     if (!over) return;
 
     const taskId = active.id;
-    const destination = over.id;
-    const validColumns = ['todo', 'in-progress', 'done'];
+    const containerId = over.data.current?.sortable?.containerId;
+    const destination = ['todo', 'in-progress', 'done'].includes(over.id) ? over.id : containerId;
 
-    if (!validColumns.includes(destination)) return;
+    if (!['todo', 'in-progress', 'done'].includes(destination)) return;
 
-    const task = tasks.find(currentTask => currentTask.id === taskId);
-
-    if (!task || task.status === destination) return;
-
-    moveTask(taskId, destination);
-  }, [tasks, moveTask]);
+    setTasks(prev => prev.map(task =>
+      task.id === taskId ? { ...task, status: destination } : task
+    ));
+  }, [setTasks]);
 
   return (
     <div className="app">
@@ -85,14 +66,7 @@ function App() {
             <h1 className="app-title">📋 Taskflow</h1>
             <p className="app-subtitle">Manage your work efficiently</p>
           </div>
-          <button
-            type="button"
-            className="btn-add"
-            onClick={() => setIsFormOpen(true)}
-            aria-label="Add new task"
-          >
-            + Add Task
-          </button>
+          <button type="button" className="btn-add" onClick={() => setIsFormOpen(true)} aria-label="Add new task">+ Add Task</button>
         </div>
       </header>
 
@@ -102,12 +76,7 @@ function App() {
           <span className="task-count">{filteredTasks.length} tasks</span>
         </div>
 
-        {isFormOpen && (
-          <TaskForm
-            onAdd={addTask}
-            onCancel={() => setIsFormOpen(false)}
-          />
-        )}
+        {isFormOpen && <TaskForm tasks={tasks} onAdd={addTask} onCancel={() => setIsFormOpen(false)} />}
 
         <Board
           todoTasks={todoTasks}
