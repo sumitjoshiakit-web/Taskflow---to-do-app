@@ -6,7 +6,6 @@
   margin-bottom: 10px;
   box-shadow: var(--shadow);
   transition: var(--transition);
-  cursor: grab;
   user-select: none;
 }
 
@@ -17,7 +16,6 @@
 
 .task-card.dragging {
   opacity: 0.5;
-  cursor: grabbing;
 }
 
 .task-card-content {
@@ -28,7 +26,9 @@
 
 .task-card-header {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 }
 
 .task-priority {
@@ -52,6 +52,27 @@
 .priority-low {
   background: #36b37e;
   color: white;
+}
+
+.drag-handle {
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.drag-handle:hover {
+  background: var(--bg-primary);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
 }
 
 .task-title {
@@ -90,28 +111,6 @@
 .btn-delete:hover {
   background: #ffe6e6;
   color: var(--priority-high);
-}
-
-.task-move {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-top: 4px;
-}
-
-.btn-move {
-  font-size: 12px;
-  padding: 4px 12px;
-  border-radius: var(--radius-sm);
-  background: var(--bg-primary);
-  color: var(--text-secondary);
-  font-weight: 500;
-  transition: var(--transition);
-}
-
-.btn-move:hover {
-  background: var(--color-todo);
-  color: white;
 }
 
 .task-edit {
