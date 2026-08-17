@@ -3,7 +3,7 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import TaskCard from './TaskCard';
 import './Column.css';
 
-function Column({ id, title, tasks, color, onDelete, onEdit, onMove }) {
+function Column({ id, title, tasks, color, onDelete, onEdit }) {
   const { setNodeRef } = useDroppable({ id });
 
   const getColorClass = () => {
@@ -22,12 +22,9 @@ function Column({ id, title, tasks, color, onDelete, onEdit, onMove }) {
         <span className="column-count">{tasks.length}</span>
       </div>
 
-      <div
-        ref={setNodeRef}
-        className="column-content"
-      >
+      <div ref={setNodeRef} className="column-content">
         <SortableContext
-          items={tasks.map(t => t.id)}
+          items={tasks.map(task => task.id)}
           strategy={verticalListSortingStrategy}
         >
           {tasks.length === 0 ? (
@@ -42,8 +39,6 @@ function Column({ id, title, tasks, color, onDelete, onEdit, onMove }) {
                 task={task}
                 onDelete={onDelete}
                 onEdit={onEdit}
-                onMove={onMove}
-                columnId={id}
               />
             ))
           )}
