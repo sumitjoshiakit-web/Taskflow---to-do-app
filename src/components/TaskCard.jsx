@@ -93,7 +93,7 @@ function TaskCard({ task, onDelete, onEdit }) {
           <>
             <div className="task-card-header">
               <span className={`task-priority ${getPriorityClass()}`}>{getPriorityLabel()}</span>
-              <button type="button" className="drag-handle" {...attributes} {...listeners} aria-label={`Drag ${task.title}`} title="Drag task">⋮⋮</button>
+              <button type="button" className="drag-handle" {...attributes} {...listeners} aria-label={`Drag ${task.title}`} title="Drag task">⋮⋮drag</button>
             </div>
 
             <h3 className="task-title" onClick={startEditing} title="Click to edit">{task.title}</h3>
