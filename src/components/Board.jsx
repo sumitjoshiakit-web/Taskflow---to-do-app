@@ -1,5 +1,4 @@
-import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DndContext, closestCorners } from '@dnd-kit/core';
 import Column from './Column';
 import './Board.css';
 
@@ -9,7 +8,6 @@ function Board({
   doneTasks,
   onDelete,
   onEdit,
-  onMove,
   onDragEnd
 }) {
   const columns = [
@@ -33,7 +31,6 @@ function Board({
             color={column.color}
             onDelete={onDelete}
             onEdit={onEdit}
-            onMove={onMove}
           />
         ))}
       </div>
