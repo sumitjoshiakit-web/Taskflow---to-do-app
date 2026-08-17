@@ -8,12 +8,21 @@ function TaskForm({ onAdd, onCancel }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title.trim()) {
+    const trimmedTitle = title.trim();
+
+    if (!trimmedTitle) {
       setError('Please enter a task title');
       return;
     }
+
+    const added = onAdd(trimmedTitle, priority);
+
+    if (!added) {
+      setError('A task with this name already exists');
+      return;
+    }
+
     setError('');
-    onAdd(title, priority);
     setTitle('');
     setPriority('medium');
   };
@@ -29,17 +38,16 @@ function TaskForm({ onAdd, onCancel }) {
               id="task-title"
               type="text"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                if (error) setError('');
+              }}
               placeholder="Enter task title..."
               className="form-input"
               autoFocus
               aria-describedby={error ? 'task-error' : undefined}
             />
-            {error && (
-              <p id="task-error" className="form-error">
-                {error}
-              </p>
-            )}
+            {error && <p id="task-error" className="form-error">{error}</p>}
           </div>
 
           <div className="form-group">
@@ -57,12 +65,8 @@ function TaskForm({ onAdd, onCancel }) {
           </div>
 
           <div className="form-actions">
-            <button type="submit" className="btn-submit">
-              Add Task
-            </button>
-            <button type="button" onClick={onCancel} className="btn-cancel-form">
-              Cancel
-            </button>
+            <button type="submit" className="btn-submit">Add Task</button>
+            <button type="button" onClick={onCancel} className="btn-cancel-form">Cancel</button>
           </div>
         </form>
       </div>
