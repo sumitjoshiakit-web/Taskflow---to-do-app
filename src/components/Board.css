@@ -1,0 +1,20 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .board {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .board {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
