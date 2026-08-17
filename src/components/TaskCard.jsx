@@ -3,7 +3,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import './TaskCard.css';
 
-function TaskCard({ task, onDelete, onEdit, onMove, columnId }) {
+function TaskCard({ task, onDelete, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
 
@@ -41,9 +41,16 @@ function TaskCard({ task, onDelete, onEdit, onMove, columnId }) {
   };
 
   const handleSaveEdit = () => {
-    if (editTitle.trim() && editTitle.trim() !== task.title) {
-      onEdit(task.id, editTitle);
+    const trimmedTitle = editTitle.trim();
+
+    if (trimmedTitle && trimmedTitle !== task.title) {
+      onEdit(task.id, trimmedTitle);
     }
+
+    if (!trimmedTitle) {
+      setEditTitle(task.title);
+    }
+
     setIsEditing(false);
   };
 
@@ -52,25 +59,12 @@ function TaskCard({ task, onDelete, onEdit, onMove, columnId }) {
     setIsEditing(false);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
       handleSaveEdit();
-    } else if (e.key === 'Escape') {
+    } else if (event.key === 'Escape') {
       handleCancelEdit();
     }
-  };
-
-  const getMoveButtons = () => {
-    const buttons = [];
-    if (columnId === 'todo') {
-      buttons.push({ label: '→ In Progress', status: 'in-progress' });
-    } else if (columnId === 'in-progress') {
-      buttons.push({ label: '← To Do', status: 'todo' });
-      buttons.push({ label: '→ Done', status: 'done' });
-    } else if (columnId === 'done') {
-      buttons.push({ label: '← In Progress', status: 'in-progress' });
-    }
-    return buttons;
   };
 
   return (
@@ -78,8 +72,6 @@ function TaskCard({ task, onDelete, onEdit, onMove, columnId }) {
       ref={setNodeRef}
       style={style}
       className={`task-card ${isDragging ? 'dragging' : ''}`}
-      {...attributes}
-      {...listeners}
     >
       <div className="task-card-content">
         {isEditing ? (
@@ -87,7 +79,7 @@ function TaskCard({ task, onDelete, onEdit, onMove, columnId }) {
             <input
               type="text"
               value={editTitle}
-              onChange={(e) => setEditTitle(e.target.value)}
+              onChange={(event) => setEditTitle(event.target.value)}
               onKeyDown={handleKeyDown}
               autoFocus
               className="task-edit-input"
@@ -95,6 +87,7 @@ function TaskCard({ task, onDelete, onEdit, onMove, columnId }) {
             />
             <div className="task-edit-actions">
               <button
+                type="button"
                 onClick={handleSaveEdit}
                 className="btn-save"
                 aria-label="Save changes"
@@ -102,6 +95,7 @@ function TaskCard({ task, onDelete, onEdit, onMove, columnId }) {
                 Save
               </button>
               <button
+                type="button"
                 onClick={handleCancelEdit}
                 className="btn-cancel"
                 aria-label="Cancel editing"
@@ -116,7 +110,19 @@ function TaskCard({ task, onDelete, onEdit, onMove, columnId }) {
               <span className={`task-priority ${getPriorityClass()}`}>
                 {getPriorityLabel()}
               </span>
+
+              <button
+                type="button"
+                className="drag-handle"
+                {...attributes}
+                {...listeners}
+                aria-label={`Drag ${task.title}`}
+                title="Drag task"
+              >
+                ⋮⋮
+              </button>
             </div>
+
             <h3
               className="task-title"
               onClick={() => setIsEditing(true)}
@@ -124,8 +130,10 @@ function TaskCard({ task, onDelete, onEdit, onMove, columnId }) {
             >
               {task.title}
             </h3>
+
             <div className="task-actions">
               <button
+                type="button"
                 onClick={() => setIsEditing(true)}
                 className="btn-edit"
                 aria-label="Edit task"
@@ -133,6 +141,7 @@ function TaskCard({ task, onDelete, onEdit, onMove, columnId }) {
                 ✏️ Edit
               </button>
               <button
+                type="button"
                 onClick={() => onDelete(task.id)}
                 className="btn-delete"
                 aria-label="Delete task"
@@ -140,20 +149,6 @@ function TaskCard({ task, onDelete, onEdit, onMove, columnId }) {
                 🗑️ Delete
               </button>
             </div>
-            {getMoveButtons().length > 0 && (
-              <div className="task-move">
-                {getMoveButtons().map((btn, index) => (
-                  <button
-                    key={index}
-                    onClick={() => onMove(task.id, btn.status)}
-                    className="btn-move"
-                    aria-label={`Move task to ${btn.label}`}
-                  >
-                    {btn.label}
-                  </button>
-                ))}
-              </div>
-            )}
           </>
         )}
       </div>
