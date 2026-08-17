@@ -24,6 +24,7 @@ function Column({ id, title, tasks, color, onDelete, onEdit }) {
 
       <div ref={setNodeRef} className="column-content">
         <SortableContext
+          id={id}
           items={tasks.map(task => task.id)}
           strategy={verticalListSortingStrategy}
         >
