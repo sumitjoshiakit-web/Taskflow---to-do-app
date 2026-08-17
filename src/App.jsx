@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import Board from './components/Board';
 import TaskForm from './components/TaskForm';
 import SearchBar from './components/SearchBar';
@@ -66,11 +66,12 @@ function App() {
 
     const taskId = active.id;
     const destination = over.id;
-
     const validColumns = ['todo', 'in-progress', 'done'];
+
     if (!validColumns.includes(destination)) return;
 
-    const task = tasks.find(t => t.id === taskId);
+    const task = tasks.find(currentTask => currentTask.id === taskId);
+
     if (!task || task.status === destination) return;
 
     moveTask(taskId, destination);
@@ -85,6 +86,7 @@ function App() {
             <p className="app-subtitle">Manage your work efficiently</p>
           </div>
           <button
+            type="button"
             className="btn-add"
             onClick={() => setIsFormOpen(true)}
             aria-label="Add new task"
@@ -113,7 +115,6 @@ function App() {
           doneTasks={doneTasks}
           onDelete={deleteTask}
           onEdit={editTask}
-          onMove={moveTask}
           onDragEnd={handleDragEnd}
         />
       </main>
