@@ -1,0 +1,168 @@
+.task-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  cursor: grab;
+  user-select: none;
+}
+
+.task-card:hover {
+  box-shadow: var(--shadow-hover);
+  border-color: #b3d4ff;
+}
+
+.task-card.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.task-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-card-header {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.task-priority {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 20px;
+  background: var(--bg-primary);
+}
+
+.priority-high {
+  background: #ff5630;
+  color: white;
+}
+
+.priority-medium {
+  background: #ffab00;
+  color: white;
+}
+
+.priority-low {
+  background: #36b37e;
+  color: white;
+}
+
+.task-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 4px 0;
+  word-wrap: break-word;
+}
+
+.task-title:hover {
+  color: var(--color-todo);
+}
+
+.task-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-edit,
+.btn-delete {
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  background: var(--bg-primary);
+}
+
+.btn-edit:hover {
+  background: #e6f0ff;
+  color: var(--color-todo);
+}
+
+.btn-delete:hover {
+  background: #ffe6e6;
+  color: var(--priority-high);
+}
+
+.task-move {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.btn-move {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.btn-move:hover {
+  background: var(--color-todo);
+  color: white;
+}
+
+.task-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-edit-input {
+  padding: 8px 12px;
+  border: 2px solid var(--color-todo);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  width: 100%;
+  outline: none;
+  background: var(--bg-secondary);
+}
+
+.task-edit-input:focus {
+  border-color: #0047b3;
+  box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
+}
+
+.task-edit-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-save,
+.btn-cancel {
+  padding: 4px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btn-save {
+  background: var(--color-todo);
+  color: white;
+}
+
+.btn-save:hover {
+  background: #0047b3;
+}
+
+.btn-cancel {
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+}
+
+.btn-cancel:hover {
+  background: #e6e6e6;
+}
